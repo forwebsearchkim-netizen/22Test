@@ -1,0 +1,345 @@
+// =============================================================================
+// Dashio - Main Stylesheet
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// 1. Custom Variables (before Bootstrap import)
+// -----------------------------------------------------------------------------
+@import "variables";
+
+// -----------------------------------------------------------------------------
+// 2. Bootstrap Core
+// -----------------------------------------------------------------------------
+@import "~bootstrap/scss/bootstrap";
+
+// -----------------------------------------------------------------------------
+// 3. Bootstrap Icons
+// -----------------------------------------------------------------------------
+$bootstrap-icons-font-dir: "~bootstrap-icons/font/fonts";
+@import "~bootstrap-icons/font/bootstrap-icons";
+
+// -----------------------------------------------------------------------------
+// 4. Layout - Minimal Custom Styles
+// -----------------------------------------------------------------------------
+// Keep this section as small as possible. Use Bootstrap utilities wherever you can.
+
+// Wrapper for sidebar + main content
+.wrapper {
+  display: flex;
+  min-height: 100vh;
+}
+
+// Sidebar
+.sidebar {
+  width: $sidebar-width;
+  flex-shrink: 0;
+  transition: width 0.2s ease-in-out;
+  
+  // Sticky positioning
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+  
+  // Scrollbar styling
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--bs-border-color);
+    border-radius: 4px;
+  }
+}
+
+// Main content area
+.main-content {
+  flex: 1;
+  min-width: 0; // Prevents flex item from overflowing
+}
+
+// Sidebar navigation
+.sidebar-nav {
+  .nav-link {
+    border-radius: var(--bs-border-radius);
+    padding: 0.625rem 1rem;
+    color: var(--bs-body-color);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    
+    &:hover {
+      background-color: var(--bs-tertiary-bg);
+    }
+    
+    &.active {
+      background-color: var(--bs-primary);
+      color: #fff;
+    }
+    
+    i {
+      font-size: 1.125rem;
+      width: 1.5rem;
+      text-align: center;
+    }
+  }
+  
+  .nav-header {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--bs-secondary-color);
+    padding: 1.25rem 1rem 0.5rem;
+  }
+}
+
+// Stats cards hover effect
+.stat-card {
+  transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--bs-box-shadow-lg);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 5. Responsive Adjustments
+// -----------------------------------------------------------------------------
+@include media-breakpoint-down(lg) {
+  .sidebar {
+    position: fixed;
+    z-index: var(--bs-offcanvas-zindex);
+    transform: translateX(-100%);
+    
+    &.show {
+      transform: translateX(0);
+    }
+  }
+  
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: calc(var(--bs-offcanvas-zindex) - 1);
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s, visibility 0.2s;
+    
+    &.show {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 6. Color Switcher
+// -----------------------------------------------------------------------------
+.color-swatch {
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  border: 2px solid transparent !important;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &.active {
+    border-color: var(--bs-body-color) !important;
+    box-shadow: 0 0 0 2px var(--bs-body-bg);
+  }
+}
+
+// -----------------------------------------------------------------------------
+// 7. Dynamic Primary Color Overrides
+// -----------------------------------------------------------------------------
+// These rules ensure Bootstrap components respond to runtime color changes
+
+// Primary buttons
+.btn-primary {
+  --bs-btn-bg: var(--bs-primary);
+  --bs-btn-border-color: var(--bs-primary);
+  --bs-btn-hover-bg: var(--bs-primary-darker, var(--bs-primary));
+  --bs-btn-hover-border-color: var(--bs-primary-darker, var(--bs-primary));
+  --bs-btn-active-bg: var(--bs-primary-darker, var(--bs-primary));
+  --bs-btn-active-border-color: var(--bs-primary-darker, var(--bs-primary));
+  --bs-btn-disabled-bg: var(--bs-primary);
+  --bs-btn-disabled-border-color: var(--bs-primary);
+}
+
+// Outline primary buttons
+.btn-outline-primary {
+  --bs-btn-color: var(--bs-primary);
+  --bs-btn-border-color: var(--bs-primary);
+  --bs-btn-hover-bg: var(--bs-primary);
+  --bs-btn-hover-border-color: var(--bs-primary);
+  --bs-btn-active-bg: var(--bs-primary);
+  --bs-btn-active-border-color: var(--bs-primary);
+}
+
+// Background utilities - only override the color, not the opacity
+.bg-primary {
+  background-color: rgba(var(--bs-primary-rgb), var(--bs-bg-opacity, 1)) !important;
+}
+
+.bg-primary-subtle {
+  background-color: rgba(var(--bs-primary-rgb), 0.1) !important;
+}
+
+// Text utilities
+.text-primary {
+  color: var(--bs-primary) !important;
+}
+
+// Border utilities
+.border-primary {
+  border-color: var(--bs-primary) !important;
+}
+
+// Breadcrumb links
+.breadcrumb-item a {
+  color: var(--bs-primary);
+
+  &:hover {
+    color: var(--bs-primary-darker, var(--bs-primary));
+  }
+}
+
+// Card footer links (e.g., "View all activity")
+.card-footer a:not(.btn) {
+  color: var(--bs-primary);
+
+  &:hover {
+    color: var(--bs-primary-darker, var(--bs-primary));
+  }
+}
+
+// Form elements
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+.form-check-input:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.form-switch .form-check-input:checked {
+  background-color: var(--bs-primary);
+}
+
+.form-range::-webkit-slider-thumb {
+  background-color: var(--bs-primary);
+}
+
+.form-range::-moz-range-thumb {
+  background-color: var(--bs-primary);
+}
+
+.form-range:focus::-webkit-slider-thumb {
+  box-shadow: 0 0 0 1px #fff, 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+.form-range:focus::-moz-range-thumb {
+  box-shadow: 0 0 0 1px #fff, 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+// Progress bar - only default/primary, not colored variants
+.progress-bar:not(.bg-success):not(.bg-info):not(.bg-warning):not(.bg-danger):not(.bg-secondary) {
+  background-color: var(--bs-primary);
+}
+
+// List group
+.list-group-item.active {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+// Pagination
+.page-link {
+  color: var(--bs-primary);
+
+  &:hover {
+    color: var(--bs-primary-darker, var(--bs-primary));
+  }
+}
+
+.page-item.active .page-link {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+// Nav pills & tabs
+.nav-pills .nav-link.active {
+  background-color: var(--bs-primary);
+}
+
+.nav-tabs .nav-link.active {
+  color: var(--bs-primary);
+  border-bottom-color: var(--bs-primary);
+}
+
+.nav-tabs .nav-link:hover:not(.active) {
+  color: var(--bs-primary-darker, var(--bs-primary));
+}
+
+// Badges
+.badge.bg-primary {
+  background-color: var(--bs-primary) !important;
+}
+
+// Alerts
+.alert-primary {
+  --bs-alert-color: var(--bs-primary);
+  --bs-alert-bg: rgba(var(--bs-primary-rgb), 0.1);
+  --bs-alert-border-color: rgba(var(--bs-primary-rgb), 0.2);
+}
+
+// Dropdown
+.dropdown-item.active,
+.dropdown-item:active {
+  background-color: var(--bs-primary);
+}
+
+// Accordion
+.accordion-button:not(.collapsed) {
+  color: var(--bs-primary);
+  background-color: rgba(var(--bs-primary-rgb), 0.1);
+}
+
+.accordion-button:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+// Spinner
+.spinner-border.text-primary {
+  color: var(--bs-primary) !important;
+}
+
+.spinner-grow.text-primary {
+  background-color: var(--bs-primary) !important;
+}
+
+// -----------------------------------------------------------------------------
+// 7. Dark Mode Adjustments
+// -----------------------------------------------------------------------------
+[data-bs-theme="dark"] {
+  .sidebar {
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--bs-border-color);
+    }
+  }
+}
+
+/* My Finance customizations */
+.stat-card{border:0;box-shadow:0 .125rem .5rem rgba(0,0,0,.05);border-radius:1rem}.card{border-radius:1rem}.nav-header{font-size:.72rem;font-weight:700;letter-spacing:.08em;color:var(--bs-secondary-color);padding:.75rem 1rem .35rem}.sidebar .nav-link{margin-bottom:.15rem}.table>tbody>tr:last-child>td{border-bottom:0}@media(max-width:991.98px){.sidebar{position:fixed;left:-280px;z-index:1040;transition:left .2s}.sidebar.show{left:0}.main-content{width:100%}}
