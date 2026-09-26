@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashio - Page Not Found">
+  <title>404 - Page Not Found | Dashio</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+</head>
+<body class="bg-body-tertiary">
+
+  <div class="min-vh-100 d-flex align-items-center justify-content-center p-3">
+    <div class="text-center" style="max-width: 500px;">
+
+      <!-- Error Code -->
+      <div class="display-1 fw-bold text-primary mb-3">404</div>
+
+      <!-- Error Message -->
+      <h1 class="h3 mb-3">Page not found</h1>
+      <p class="text-body-secondary mb-4">
+        Sorry, we couldn't find the page you're looking for. Perhaps you've mistyped the URL or the page has been moved.
+      </p>
+
+      <!-- Actions -->
+      <div class="d-flex flex-column flex-sm-row gap-2 justify-content-center">
+        <a href="../" class="btn btn-primary">
+          <i class="bi bi-house me-2"></i>Go to Dashboard
+        </a>
+        <button type="button" class="btn btn-outline-secondary" onclick="history.back()">
+          <i class="bi bi-arrow-left me-2"></i>Go Back
+        </button>
+      </div>
+
+      <!-- Help -->
+      <p class="mt-4 mb-0 text-body-secondary small">
+        Need help? <a href="#" class="text-decoration-none">Contact support</a>
+      </p>
+
+      <!-- Theme toggle -->
+      <div class="mt-4">
+        <button type="button" class="btn btn-link text-body-secondary p-0" data-toggle="theme">
+          <i class="bi bi-moon-fill me-1"></i>
+          <small>Toggle theme</small>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module" src="../js/main.js"></script>
+</body>
+</html>

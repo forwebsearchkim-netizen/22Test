@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashio - Kanban Board">
+  <title>Kanban | Dashio</title>
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg">
+  <style>
+    .kanban-board {
+      display: flex;
+      gap: 1rem;
+      overflow-x: auto;
+      padding-bottom: 1rem;
+    }
+    .kanban-column {
+      min-width: 300px;
+      max-width: 300px;
+      flex-shrink: 0;
+    }
+    .kanban-card {
+      cursor: grab;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .kanban-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--bs-box-shadow);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrapper">
+    <!-- Sidebar -->
+    <aside class="sidebar bg-body-tertiary border-end">
+      <div class="d-flex flex-column h-100">
+        <div class="d-flex align-items-center justify-content-between p-3 border-bottom">
+          <a href="../" class="d-flex align-items-center text-decoration-none">
+            <span class="fs-5 fw-semibold text-primary">Dashio</span>
+          </a>
+          <button type="button" class="btn btn-link text-body d-lg-none p-0" data-dismiss="sidebar">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+        <nav class="sidebar-nav flex-grow-1 p-3">
+          <ul class="nav flex-column gap-1">
+            <li class="nav-item">
+              <a class="nav-link" href="../">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li class="nav-header">Pages</li>
+            <li class="nav-item">
+              <a class="nav-link" href="./tables.html">
+                <i class="bi bi-table"></i>
+                <span>Tables</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./forms.html">
+                <i class="bi bi-ui-checks"></i>
+                <span>Forms</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./charts.html">
+                <i class="bi bi-bar-chart-line"></i>
+                <span>Charts</span>
+              </a>
+            </li>
+            <li class="nav-header">Apps</li>
+            <li class="nav-item">
+              <a class="nav-link" href="./notifications.html">
+                <i class="bi bi-bell"></i>
+                <span>Notifications</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="./calendar.html">
+                <i class="bi bi-calendar3"></i>
+                <span>Calendar</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link active" href="./kanban.html">
+                <i class="bi bi-kanban"></i>
+                <span>Kanban</span>
+              </a>
+            </li>
+            <li class="nav-header">Account</li>
+            <li class="nav-item">
+              <a class="nav-link" href="./login.html">
+                <i class="bi bi-box-arrow-in-right"></i>
+                <span>Login</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+        <div class="p-3 border-top">
+          <div class="d-flex align-items-center gap-3">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+              <i class="bi bi-person-fill"></i>
+            </div>
+            <div class="flex-grow-1 min-w-0">
+              <div class="fw-medium text-truncate">Admin User</div>
+              <div class="small text-body-secondary text-truncate">admin@dashio.com</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <header class="sticky-top bg-body border-bottom">
+        <div class="d-flex align-items-center justify-content-between px-3 px-lg-4 py-2">
+          <button type="button" class="btn btn-link text-body d-lg-none p-0 me-3" data-toggle="sidebar">
+            <i class="bi bi-list fs-4"></i>
+          </button>
+          <div class="flex-grow-1 me-3" style="max-width: 400px;">
+            <div class="input-group">
+              <span class="input-group-text bg-transparent border-end-0"><i class="bi bi-search"></i></span>
+              <input type="search" class="form-control border-start-0" placeholder="Search...">
+            </div>
+          </div>
+          <div class="d-flex align-items-center gap-2">
+            <div class="dropdown color-switcher-dropdown">
+              <button type="button" class="btn btn-link text-body p-2" data-bs-toggle="dropdown" title="Change color">
+                <i class="bi bi-palette"></i>
+              </button>
+              <div class="dropdown-menu dropdown-menu-end p-3" style="min-width: 200px;">
+                <div class="small fw-medium mb-2">Primary Color</div>
+                <div class="d-flex flex-wrap gap-2" id="colorSwitcher">
+                  <button type="button" class="btn p-0 border-2 rounded-circle color-swatch active" data-color="#4f46e5" style="width: 28px; height: 28px; background: #4f46e5;" title="Indigo"></button>
+                  <button type="button" class="btn p-0 border-2 rounded-circle color-swatch" data-color="#0d9488" style="width: 28px; height: 28px; background: #0d9488;" title="Teal"></button>
+                  <button type="button" class="btn p-0 border-2 rounded-circle color-swatch" data-color="#e11d48" style="width: 28px; height: 28px; background: #e11d48;" title="Rose"></button>
+                  <button type="button" class="btn p-0 border-2 rounded-circle color-swatch" data-color="#059669" style="width: 28px; height: 28px; background: #059669;" title="Emerald"></button>
+                  <button type="button" class="btn p-0 border-2 rounded-circle color-swatch" data-color="#ea580c" style="width: 28px; height: 28px; background: #ea580c;" title="Orange"></button>
+                  <button type="button" class="btn p-0 border-2 rounded-circle color-swatch" data-color="#7c3aed" style="width: 28px; height: 28px; background: #7c3aed;" title="Violet"></button>
+                  <button type="button" class="btn p-0 border-2 rounded-circle color-swatch" data-color="#2563eb" style="width: 28px; height: 28px; background: #2563eb;" title="Blue"></button>
+                  <button type="button" class="btn p-0 border-2 rounded-circle color-swatch" data-color="#475569" style="width: 28px; height: 28px; background: #475569;" title="Slate"></button>
+                </div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-link text-body p-2" data-toggle="theme">
+              <i class="bi bi-moon-fill"></i>
+            </button>
+            <div class="dropdown">
+              <button type="button" class="btn btn-link p-0" data-bs-toggle="dropdown">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;">
+                  <i class="bi bi-person-fill"></i>
+                </div>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end">
+                <li><a class="dropdown-item" href="./profile.html"><i class="bi bi-person me-2"></i>Profile</a></li>
+                <li><a class="dropdown-item" href="./settings.html"><i class="bi bi-gear me-2"></i>Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="./login.html"><i class="bi bi-box-arrow-right me-2"></i>Sign out</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="p-3 p-lg-4">
+        <!-- Page Header -->
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+          <div>
+            <h1 class="h3 mb-1">Kanban Board</h1>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="../">Home</a></li>
+                <li class="breadcrumb-item active">Kanban</li>
+              </ol>
+            </nav>
+          </div>
+          <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-secondary">
+              <i class="bi bi-filter me-1"></i> Filter
+            </button>
+            <button type="button" class="btn btn-primary">
+              <i class="bi bi-plus-lg me-1"></i> Add Task
+            </button>
+          </div>
+        </div>
+
+        <!-- Kanban Board -->
+        <div class="kanban-board">
+          <!-- To Do Column -->
+          <div class="kanban-column">
+            <div class="card">
+              <div class="card-header bg-transparent d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-secondary">To Do</span>
+                  <span class="text-body-secondary small">4 tasks</span>
+                </div>
+                <button class="btn btn-sm btn-link text-body p-0"><i class="bi bi-three-dots"></i></button>
+              </div>
+              <div class="card-body d-flex flex-column gap-3">
+                <div class="card kanban-card border">
+                  <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <span class="badge bg-danger-subtle text-danger">High</span>
+                      <button class="btn btn-sm btn-link text-body p-0"><i class="bi bi-three-dots-vertical"></i></button>
+                    </div>
+                    <h6 class="mb-2">Design new landing page</h6>
+                    <p class="text-body-secondary small mb-3">Create mockups for the new marketing landing page</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.7rem; margin-left: -5px;">JD</div>
+                      </div>
+                      <div class="d-flex align-items-center gap-2 text-body-secondary small">
+                        <span><i class="bi bi-chat-dots me-1"></i>3</span>
+                        <span><i class="bi bi-paperclip me-1"></i>2</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card kanban-card border">
+                  <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <span class="badge bg-warning-subtle text-warning">Medium</span>
+                      <button class="btn btn-sm btn-link text-body p-0"><i class="bi bi-three-dots-vertical"></i></button>
+                    </div>
+                    <h6 class="mb-2">Update documentation</h6>
+                    <p class="text-body-secondary small mb-3">Review and update API docs</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex">
+                        <div class="rounded-circle bg-info text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.7rem;">SL</div>
+                      </div>
+                      <div class="d-flex align-items-center gap-2 text-body-secondary small">
+                        <span><i class="bi bi-chat-dots me-1"></i>1</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-outline-secondary btn-sm w-100">
+                  <i class="bi bi-plus me-1"></i> Add Task
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- In Progress Column -->
+          <div class="kanban-column">
+            <div class="card">
+              <div class="card-header bg-transparent d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-primary">In Progress</span>
+                  <span class="text-body-secondary small">3 tasks</span>
+                </div>
+                <button class="btn btn-sm btn-link text-body p-0"><i class="bi bi-three-dots"></i></button>
+              </div>
+              <div class="card-body d-flex flex-column gap-3">
+                <div class="card kanban-card border">
+                  <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <span class="badge bg-danger-subtle text-danger">High</span>
+                      <button class="btn btn-sm btn-link text-body p-0"><i class="bi bi-three-dots-vertical"></i></button>
+                    </div>
+                    <h6 class="mb-2">Implement authentication</h6>
+                    <p class="text-body-secondary small mb-3">Add OAuth and JWT support</p>
+                    <div class="progress mb-3" style="height: 4px;">
+                      <div class="progress-bar bg-primary" style="width: 60%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex">
+                        <div class="rounded-circle bg-success text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.7rem;">MT</div>
+                        <div class="rounded-circle bg-warning text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.7rem; margin-left: -8px;">RJ</div>
+                      </div>
+                      <div class="d-flex align-items-center gap-2 text-body-secondary small">
+                        <span><i class="bi bi-chat-dots me-1"></i>5</span>
+                        <span><i class="bi bi-paperclip me-1"></i>4</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="card kanban-card border">
+                  <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <span class="badge bg-info-subtle text-info">Low</span>
+                      <button class="btn btn-sm btn-link text-body p-0"><i class="bi bi-three-dots-vertical"></i></button>
+                    </div>
+                    <h6 class="mb-2">Write unit tests</h6>
+                    <p class="text-body-secondary small mb-3">Increase test coverage to 80%</p>
+                    <div class="progress mb-3" style="height: 4px;">
+                      <div class="progress-bar bg-primary" style="width: 35%"></div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex">
+                        <div class="rounded-circle bg-danger text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.7rem;">EW</div>
+                      </div>
+                      <div class="d-flex align-items-center gap-2 text-body-secondary small">
+                        <span><i class="bi bi-chat-dots me-1"></i>2</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-outline-secondary btn-sm w-100">
+                  <i class="bi bi-plus me-1"></i> Add Task
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Review Column -->
+          <div class="kanban-column">
+            <div class="card">
+              <div class="card-header bg-transparent d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-warning">Review</span>
+                  <span class="text-body-secondary small">2 tasks</span>
+                </div>
+                <button class="btn btn-sm btn-link text-body p-0"><i class="bi bi-three-dots"></i></button>
+              </div>
+              <div class="card-body d-flex flex-column gap-3">
+                <div class="card kanban-card border">
+                  <div class="card-body p-3">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                      <span class="badge bg-warning-subtle text-warning">Medium</span>
+                      <button class="btn btn-sm btn-link text-body p-0"><i class="bi bi-three-dots-vertical"></i></button>
+                    </div>
+                    <h6 class="mb-2">Database optimization</h6>
+                    <p class="text-body-secondary small mb-3">Optimize slow queries</p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex">
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.7rem;">AS</div>
+                      </div>
+                      <div class="d-flex align-items-center gap-2 text-body-secondary small">
+                        <span><i class="bi bi-chat-dots me-1"></i>8</span>
+                        <span><i class="bi bi-paperclip me-1"></i>1</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-outline-secondary btn-sm w-100">
+                  <i class="bi bi-plus me-1"></i> Add Task
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Done Column -->
+          <div class="kanban-column">
+            <div class="card">
+              <div class="card-header bg-transparent d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2">
+                  <span class="badge bg-success">Done</span>
+                  <span class="text-body-secondary small">5 tasks</span>
+                </div>
+                <button class="btn btn-sm btn-link text-body p-0"><i class="bi bi-three-dots"></i></button>
+              </div>
+              <div class="card-body d-flex flex-column gap-3">
+                <div class="card kanban-card border">
+                  <div class="card-body p-3">
+                    <h6 class="mb-2 text-decoration-line-through text-body-secondary">Setup CI/CD pipeline</h6>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex">
+                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.7rem;">MT</div>
+                      </div>
+                      <span class="text-success small"><i class="bi bi-check-circle-fill me-1"></i>Completed</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="card kanban-card border">
+                  <div class="card-body p-3">
+                    <h6 class="mb-2 text-decoration-line-through text-body-secondary">Create user onboarding flow</h6>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <div class="d-flex">
+                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 28px; height: 28px; font-size: 0.7rem;">JD</div>
+                      </div>
+                      <span class="text-success small"><i class="bi bi-check-circle-fill me-1"></i>Completed</span>
+                    </div>
+                  </div>
+                </div>
+                <button class="btn btn-outline-secondary btn-sm w-100">
+                  <i class="bi bi-plus me-1"></i> Add Task
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Add Column Button -->
+          <div class="kanban-column">
+            <button class="btn btn-outline-secondary w-100 h-100 d-flex align-items-center justify-content-center" style="min-height: 200px;">
+              <div class="text-center">
+                <i class="bi bi-plus-lg fs-4 d-block mb-2"></i>
+                Add Column
+              </div>
+            </button>
+          </div>
+        </div>
+      </main>
+
+      <footer class="py-3 px-3 px-lg-4 border-top mt-auto">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-2">
+          <div class="text-body-secondary small">&copy; 2025 Dashio. All rights reserved.</div>
+          <ul class="nav gap-3">
+            <li class="nav-item"><a href="#" class="nav-link px-0 text-body-secondary small">Privacy</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-0 text-body-secondary small">Terms</a></li>
+            <li class="nav-item"><a href="#" class="nav-link px-0 text-body-secondary small">Support</a></li>
+          </ul>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script type="module" src="../js/main.js"></script>
+</body>
+</html>
